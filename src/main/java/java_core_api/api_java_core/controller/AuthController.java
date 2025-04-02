@@ -31,8 +31,8 @@ public class AuthController {
         Usuario user = usuarioMapper.findByUsername(usuario.getEmail());
 
         if (user != null && passwordEncoder.matches(usuario.getSenha(), user.getSenha())) {
-            String token = JwtUtil.generateToken(user.getEmail());
-            return new LoginResponseDTO(token, user.getEmail(), user.getRole());
+            String token = JwtUtil.generateToken(user);
+            return new LoginResponseDTO( user.getId(), token, user.getEmail(), user.getRole());
         }
 
         throw new CredenciaisInvalidasException();
@@ -45,12 +45,6 @@ public class AuthController {
         return "Usuário cadastrado com sucesso!";
     }
 
-
-    @GetMapping("/me")
-    public String rotaPrivada() {
-        String email = (String) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        return "Acesso liberado! Usuário autenticado: " + email;
-    }
 
 
 }

@@ -19,4 +19,13 @@ public class UsuarioService {
         usuario.setSenha(encoder.encode(usuario.getSenha()));
         usuarioMapper.insertUsuario(usuario);
     }
+
+
+
+    public Usuario obtemUserPorId(Long id) {
+
+       Usuario user =  usuarioMapper.obtemUserPorId(id);
+
+       return user;
+    }
 }

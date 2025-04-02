@@ -9,6 +9,12 @@
         SELECT * FROM seguranca.usuarios WHERE email = #{email}
     </select>
 
+
+    <select id="obtemUserPorId" parameterType="long" resultType="java_core_api.api_java_core.domain.Usuario">
+        SELECT * FROM seguranca.usuarios WHERE id = #{id}
+    </select>
+
+
     <insert id="insertUsuario" parameterType="java_core_api.api_java_core.domain.Usuario">
         INSERT INTO seguranca.usuarios (nome ,email, senha, role)
         VALUES ( #{nome}, #{email}, #{senha}, #{role})

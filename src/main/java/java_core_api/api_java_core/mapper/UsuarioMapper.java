@@ -9,4 +9,6 @@ public interface UsuarioMapper {
 
     void insertUsuario(Usuario usuario);
 
+    Usuario obtemUserPorId (Long id);
+
 }

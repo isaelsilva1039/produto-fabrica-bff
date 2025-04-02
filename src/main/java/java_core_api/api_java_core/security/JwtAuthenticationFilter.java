@@ -36,11 +36,12 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                         .parseClaimsJws(token)
                         .getBody();
 
-                String email = claims.getSubject();
+                // Agora o subject é o ID do usuário
+                Long userId = Long.valueOf(claims.getSubject());
 
-                // Autenticação simples com apenas o email e sem roles
+                // Autenticação com ID do usuário como principal
                 UsernamePasswordAuthenticationToken authentication =
-                        new UsernamePasswordAuthenticationToken(email, null, Collections.emptyList());
+                        new UsernamePasswordAuthenticationToken(userId, null, Collections.emptyList());
 
                 SecurityContextHolder.getContext().setAuthentication(authentication);
             } catch (Exception e) {
