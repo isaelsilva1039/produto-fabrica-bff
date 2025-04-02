@@ -1,4 +1,4 @@
-package java_core_api.api_java_core.ultis;
+package java_core_api.api_java_core.utils;
 
 import jakarta.servlet.http.HttpServletRequest;
 
