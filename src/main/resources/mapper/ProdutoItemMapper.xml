@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="java_core_api.api_java_core.mapper.ProdutoItemMapper">
+
+    <select id="findByDescricao" resultType="java_core_api.api_java_core.domain.ProdutoItem">
+        SELECT * FROM cadastro.produto_item WHERE descricao = #{descricao}
+    </select>
+
+    <select id="findByCodigoBarras" resultType="java_core_api.api_java_core.domain.ProdutoItem">
+        SELECT * FROM cadastro.produto_item WHERE codigo_barras = #{codigoBarras}
+    </select>
+
+    <insert id="insert" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO cadastro.produto_item (
+        id_produto,
+        descricao,
+        tipo_codigo,
+<!--        id_marca,-->
+        peso,
+        hash_imagem,
+        codigo_barras
+        ) VALUES (
+        #{produto.id},
+        #{descricao},
+        #{tipoCodigo},
+<!--        #{marca.id},-->
+        #{peso},
+        #{hashImagem},
+        #{codigoBarras}
+        )
+    </insert>
+
+</mapper>

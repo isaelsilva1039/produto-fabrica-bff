@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="java_core_api.api_java_core.mapper.ProdutoMapper">
+
+    <select id="findByDescricao" resultType="java_core_api.api_java_core.domain.Produto">
+        SELECT * FROM cadastro.produto WHERE descricao = #{descricao}
+    </select>
+
+    <insert id="insert" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO cadastro.produto (
+        descricao,
+        id_categoria
+        ) VALUES (
+        #{descricao},
+        #{categoria.id}
+        )
+    </insert>
+
+</mapper>

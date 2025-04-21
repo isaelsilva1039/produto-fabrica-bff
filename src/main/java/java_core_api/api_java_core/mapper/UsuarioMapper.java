@@ -11,4 +11,6 @@ public interface UsuarioMapper {
 
     Usuario obtemUserPorId (Long id);
 
+
+
 }

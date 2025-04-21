@@ -4,13 +4,12 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.util.List;
 @Getter
 @Setter
 @AllArgsConstructor
-public class LoginResponseDTO {
-    private Long id;
-    private String token;
-    private String email;
-    private String role;
-    private String nome;
+public class CupomImportacaoDTO {
+    private EmitenteDTO emitente;
+    private List<ProdutoImportadoDTO> produtos;
 }
+

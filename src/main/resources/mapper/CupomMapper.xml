@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+
+<mapper namespace="java_core_api.api_java_core.mapper.CupomMapper">
+    <insert id="insert" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO cadastro.cupom (id_mercado, id_usuario, data_coleta, data_compra, valor_compras)
+        VALUES (#{mercado.id}, #{idUsuario}, #{dataColeta}, #{dataCompra}, #{valorCompras})
+    </insert>
+
+    <update id="updateValorTotal">
+        UPDATE cadastro.cupom
+        SET valor_compras = #{valorCompras}
+        WHERE id = #{id}
+    </update>
+</mapper>

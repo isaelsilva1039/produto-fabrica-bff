@@ -1,6 +1,7 @@
 package java_core_api.api_java_core.services;
 
 import java_core_api.api_java_core.domain.Usuario;
+import java_core_api.api_java_core.exception.EmailJaExisteException;
 import java_core_api.api_java_core.mapper.UsuarioMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -15,8 +16,15 @@ public class UsuarioService {
     private final BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
 
     public void criarUsuario(Usuario usuario) {
-        // Criptografa a senha antes de salvar
         usuario.setSenha(encoder.encode(usuario.getSenha()));
+
+        Usuario existente = usuarioMapper.findByUsername(usuario.getEmail());
+
+        if (existente != null) {
+            throw new EmailJaExisteException("E-mail já está em uso");
+        }
+
+
         usuarioMapper.insertUsuario(usuario);
     }
 

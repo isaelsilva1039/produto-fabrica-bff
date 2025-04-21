@@ -8,16 +8,19 @@ import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
 import java.security.Key;
 import java.util.Collections;
+import java.util.List;
 
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
-    private final String SECRET = "minha-super-chave-secreta-jwt-de-32-caracteres"; // mesma usada no JwtUtil
+    private final String SECRET = "minha-super-chave-secreta-jwt-de-32-caracteres";
     private final Key SECRET_KEY = Keys.hmacShaKeyFor(SECRET.getBytes());
 
     @Override
@@ -36,19 +39,23 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                         .parseClaimsJws(token)
                         .getBody();
 
-                // Agora o subject é o ID do usuário
                 Long userId = Long.valueOf(claims.getSubject());
 
-                // Autenticação com ID do usuário como principal
                 UsernamePasswordAuthenticationToken authentication =
                         new UsernamePasswordAuthenticationToken(userId, null, Collections.emptyList());
 
                 SecurityContextHolder.getContext().setAuthentication(authentication);
+
             } catch (Exception e) {
-                // Token inválido, nada é feito (poderia logar)
+                // Aqui, se o token for inválido, lança uma exceção explícita
+                response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+                response.setContentType("application/json");
+                response.getWriter().write("{\"error\": \"Token inválido ou expirado.\"}");
+                return;
             }
         }
 
         filterChain.doFilter(request, response);
     }
+
 }

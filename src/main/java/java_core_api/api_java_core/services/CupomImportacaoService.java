@@ -1,0 +1,140 @@
+package java_core_api.api_java_core.services;
+
+import java_core_api.api_java_core.domain.*;
+import java_core_api.api_java_core.dtos.CupomImportacaoDTO;
+import java_core_api.api_java_core.dtos.EmitenteDTO;
+import java_core_api.api_java_core.dtos.ProdutoImportadoDTO;
+import java_core_api.api_java_core.mapper.*;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import java.math.BigDecimal;
+import java.text.NumberFormat;
+import java.time.LocalDateTime;
+import java.util.Locale;
+
+@Service
+public class CupomImportacaoService {
+
+    @Autowired private MercadoMapper mercadoMapper;
+    @Autowired private ProdutoMapper produtoMapper;
+    @Autowired private ProdutoItemMapper produtoItemMapper;
+    @Autowired private CupomMapper cupomMapper;
+    @Autowired private CupomItemMapper cupomItemMapper;
+    @Autowired private NotaFiscalMapper notaFiscalMapper;
+    @Autowired private PrecoItemMercadoMapper precoItemMercadoMapper;
+    @Autowired private ProdutoItemInfoFiscalMapper produtoItemInfoFiscalMapper;
+
+    public void processar(CupomImportacaoDTO dto) {
+        EmitenteDTO emitente = dto.getEmitente();
+
+        NotaFiscal notaFiscal = notaFiscalMapper.buscarNotasPorChave(emitente.getChaveAcesso());
+
+        Mercado mercado = mercadoMapper.findByCnpj(emitente.getCnpj());
+        if (mercado == null) {
+            mercado = new Mercado();
+            mercado.setRazaoSocial(emitente.getRazaoSocial());
+            mercado.setFantasia(emitente.getNomeFantasia());
+            mercado.setEndereco(emitente.getEndereco());
+            mercado.setCnpj(emitente.getCnpj());
+            mercadoMapper.insert(mercado);
+        }
+
+        Cupom cupom = new Cupom();
+        cupom.setMercado(mercado);
+        cupom.setDataColeta(LocalDateTime.now());
+        cupom.setDataCompra(LocalDateTime.now());
+        cupom.setValorCompras(BigDecimal.ZERO);
+        cupom.setIdUsuario(notaFiscal.getUsuarioId());
+        cupomMapper.insert(cupom);
+
+        for (ProdutoImportadoDTO prod : dto.getProdutos()) {
+            ProdutoItem item = produtoItemMapper.findByCodigoBarras(prod.getCodigoBarras());
+
+            Produto produto;
+            if (item != null) {
+                produto = item.getProduto();
+            } else {
+                produto = produtoMapper.findByDescricao(prod.getDescricao());
+                if (produto == null) {
+                    produto = new Produto();
+                    produto.setDescricao(prod.getDescricao());
+                    Categoria categoria = new Categoria();
+                    // categoria.setId(1L);
+                    produto.setCategoria(categoria);
+                    produtoMapper.insert(produto);
+                }
+
+                item = new ProdutoItem();
+                item.setProduto(produto);
+                item.setDescricao(prod.getDescricao());
+                item.setCodigoBarras(prod.getCodigoBarras());
+                item.setTipoCodigo("EAN");
+
+                Marca marca = new Marca();
+                // marca.setId(1L);
+                item.setMarca(marca);
+
+                item.setPeso(BigDecimal.ZERO);
+                item.setHashImagem(null);
+
+                produtoItemMapper.insert(item);
+            }
+
+            CupomItem cupomItem = new CupomItem();
+            cupomItem.setCupom(cupom);
+            cupomItem.setProdutoItem(item);
+            cupomItem.setQtde(parseDecimalBr(prod.getQtde()));
+            cupomItem.setPreco(parseDecimalBr(prod.getValorTotal()));
+            cupomItemMapper.insert(cupomItem);
+
+            cupom.setValorCompras(cupom.getValorCompras().add(cupomItem.getPreco()));
+
+            PrecoItemMercado precoAtual = new PrecoItemMercado();
+            precoAtual.setProdutoItem(item);
+            precoAtual.setMercado(mercado);
+            precoAtual.setPreco(cupomItem.getPreco());
+            precoAtual.setDataColeta(cupom.getDataColeta());
+            precoItemMercadoMapper.upsertPreco(precoAtual);
+
+            ProdutoItemInfoFiscal fiscal = new ProdutoItemInfoFiscal();
+            fiscal.setProdutoItem(item);
+            fiscal.setMercado(mercado);
+            fiscal.setCstIcms(prod.getCstICMS());
+            fiscal.setValorTotalIcms(parseDecimalBr(prod.getValorTotalICMS()));
+            fiscal.setCstPis(prod.getCstPIS());
+            fiscal.setValorPis(parseDecimalBr(prod.getValorPIS()));
+            fiscal.setCstCofins(prod.getCstCOFINS());
+            fiscal.setValorCofins(parseDecimalBr(prod.getValorCOFINS()));
+            fiscal.setDataAtualizacao(LocalDateTime.now());
+            produtoItemInfoFiscalMapper.upsertInfoFiscal(fiscal);
+        }
+
+        cupomMapper.updateValorTotal(cupom);
+        notaFiscalMapper.atualizarStatusNota(notaFiscal.getId(), 2);
+    }
+
+    private BigDecimal parseDecimalBr(String valor) {
+        if (valor == null || valor.trim().isEmpty()) return BigDecimal.ZERO;
+
+        try {
+            // Debug
+            System.out.println("🧪 Valor fiscal recebido: [" + valor + "]");
+
+            // Remove espaços invisíveis, quebra espaços, substitui vírgula por ponto
+            String sanitized = valor
+                    .replaceAll("[\\u00A0\\u2007\\u202F]", "") // NBSP etc
+                    .replace(" ", "")
+                    .trim()
+                    .replace(",", ".");
+
+            System.out.println("🔍 Valor sanitizado: [" + sanitized + "]");
+            return new BigDecimal(sanitized);
+
+        } catch (Exception e) {
+            System.err.println("❌ Erro ao converter valor fiscal: [" + valor + "]");
+            e.printStackTrace();
+            return BigDecimal.ZERO;
+        }
+    }
+}

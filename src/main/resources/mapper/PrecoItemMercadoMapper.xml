@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+
+<mapper namespace="java_core_api.api_java_core.mapper.PrecoItemMercadoMapper">
+
+    <insert id="upsertPreco" parameterType="java_core_api.api_java_core.domain.PrecoItemMercado">
+        INSERT INTO cadastro.preco_item_mercado (
+        id_produto_item,
+        id_mercado,
+        preco,
+        data_coleta
+        ) VALUES (
+        #{produtoItem.id},
+        #{mercado.id},
+        #{preco},
+        #{dataColeta}
+        )
+        ON CONFLICT (id_produto_item, id_mercado)
+        DO UPDATE SET
+        preco = EXCLUDED.preco,
+        data_coleta = EXCLUDED.data_coleta
+    </insert>
+
+</mapper>

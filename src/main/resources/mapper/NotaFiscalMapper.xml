@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="java_core_api.api_java_core.mapper.NotaFiscalMapper">
+    <insert id="inserirNotaFiscal" parameterType="java_core_api.api_java_core.domain.NotaFiscal">
+        INSERT INTO nota.nota_fiscal (
+        usuario_id,
+        chave_nf,
+        url_nf,
+        data_hora_coleta,
+        status
+        )
+        VALUES (
+        #{usuarioId},
+        #{chaveNf},
+        #{urlNf},
+        #{dataHoraColeta},
+        #{status.codigo}
+        )
+    </insert>
+
+    <select id="buscarNotasPorUsuario" resultMap="notaFiscalMap">
+        SELECT
+        id,
+        usuario_id,
+        chave_nf,
+        url_nf,
+        data_hora_coleta,
+        status
+        FROM nota.nota_fiscal
+        WHERE usuario_id = #{usuarioId}
+        ORDER BY data_hora_coleta DESC
+    </select>
+
+    <select id="buscarNotasPorChave" resultMap="notaFiscalMap">
+        SELECT
+        id,
+        usuario_id,
+        chave_nf,
+        url_nf,
+        data_hora_coleta,
+        status
+        FROM nota.nota_fiscal
+        WHERE chave_nf = #{chave}
+        ORDER BY data_hora_coleta DESC
+    </select>
+
+    <select id="buscarNotasPendentes" resultMap="notaFiscalMap">
+        SELECT
+        id,
+        usuario_id,
+        chave_nf,
+        url_nf,
+        data_hora_coleta,
+        status
+        FROM nota.nota_fiscal
+        WHERE status = 0
+        ORDER BY data_hora_coleta DESC
+    </select>
+
+    <update id="atualizarStatusNota">
+        UPDATE nota.nota_fiscal
+        SET status = #{status}
+        WHERE id = #{id}
+    </update>
+
+    <resultMap id="notaFiscalMap" type="java_core_api.api_java_core.domain.NotaFiscal">
+        <id property="id" column="id" />
+        <result property="usuarioId" column="usuario_id" />
+        <result property="chaveNf" column="chave_nf" />
+        <result property="urlNf" column="url_nf" />
+        <result property="dataHoraColeta" column="data_hora_coleta" />
+        <result property="status" column="status" typeHandler="java_core_api.api_java_core.mapper.handler.StatusNotaFiscalTypeHandler"/>
+    </resultMap>
+
+</mapper>
