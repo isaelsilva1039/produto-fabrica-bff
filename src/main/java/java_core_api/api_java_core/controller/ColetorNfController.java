@@ -61,7 +61,7 @@ public class ColetorNfController {
 
     @GetMapping("/listar/pendente")
     public ResponseEntity<?> listarNotasPendete() {
-        log.info("🔍 Iniciando listagem de notas fiscais pendentes [][] ✅ {},");
+        log.info("🔍 Iniciando listagem de notas fiscais pendentes,");
 
         List<NotaFiscal> notas = notaFiscalService.buscarNotasPendentes();
 
