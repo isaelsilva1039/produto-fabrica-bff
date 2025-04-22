@@ -7,7 +7,9 @@ import java_core_api.api_java_core.mapper.NotaFiscalMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+
 import java.util.List;
+
 
 @Service
 public class NotaFiscalService {
@@ -25,6 +27,7 @@ public class NotaFiscalService {
 
         notaFiscalMapper.inserirNotaFiscal(nota);
     }
+
 
 
     public List<NotaFiscal> buscarNotasPorUsuario(Long usuarioId) {
