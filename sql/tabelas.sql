@@ -1,10 +1,5 @@
-CREATE TABLE cadastro.bandeira (
-	id bigserial NOT NULL,
-	descricao varchar(255) NULL,
-	hash_imagem varchar(255) NULL,
-	caminho_imagem varchar(255) NULL,
-	CONSTRAINT bandeira_pkey PRIMARY KEY (id)
-);
+CREATE SCHEMA IF NOT EXISTS seguranca;
+
 
 
 CREATE TABLE seguranca.usuarios (
@@ -30,6 +25,8 @@ CREATE TABLE IF NOT EXISTS nota.nota_fiscal (
 
 
 
+CREATE SCHEMA IF NOT EXISTS  cadastro;
+
 -- Tabela GRUPO
 CREATE TABLE cadastro.grupo (
     id SERIAL PRIMARY KEY,
@@ -44,9 +41,11 @@ CREATE TABLE cadastro.categoria (
 
 -- Tabela BANDEIRA
 CREATE TABLE cadastro.bandeira (
-    id SERIAL PRIMARY KEY,
-    descricao VARCHAR(255),
-    hash_imagem TEXT
+	id bigserial NOT NULL,
+	descricao varchar(255) NULL,
+	hash_imagem varchar(255) NULL,
+	caminho_imagem varchar(255) NULL,
+	CONSTRAINT bandeira_pkey PRIMARY KEY (id)
 );
 
 -- Tabela MARCA
@@ -171,3 +170,4 @@ ALTER TABLE cadastro.produto_item_info_fiscal
     ALTER COLUMN cst_icms TYPE VARCHAR(255),
     ALTER COLUMN cst_pis TYPE VARCHAR(255),
     ALTER COLUMN cst_cofins TYPE VARCHAR(255);
+
