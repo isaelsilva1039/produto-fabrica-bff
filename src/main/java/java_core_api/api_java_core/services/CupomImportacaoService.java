@@ -30,6 +30,10 @@ public class CupomImportacaoService {
 
         NotaFiscal notaFiscal = notaFiscalMapper.buscarNotasPorChave(emitente.getChaveAcesso());
 
+        if (notaFiscal == null) {
+            throw new IllegalStateException("Nota fiscal não encontrada para chave: " + emitente.getChaveAcesso());
+        }
+
         Mercado mercado = mercadoMapper.findByCnpj(emitente.getCnpj());
         if (mercado == null) {
             mercado = new Mercado();
@@ -111,7 +115,7 @@ public class CupomImportacaoService {
         }
 
         cupomMapper.updateValorTotal(cupom);
-        notaFiscalMapper.atualizarStatusNota(notaFiscal.getId(), 2);
+        notaFiscalMapper.atualizarStatusNota(notaFiscal.getId(), 1);
     }
 
     private BigDecimal parseDecimalBr(String valor) {

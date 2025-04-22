@@ -34,7 +34,7 @@ public class SecurityConfig {
                 .csrf(csrf -> csrf.disable())
                 .cors(cors -> cors.configurationSource(corsConfigurationSource()))
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/auth/login", "/auth/register").permitAll()
+                        .requestMatchers("/auth/login", "/auth/register", "/nf/listar/pendente", "/api/importacao/nota-fiscal").permitAll()
                         .anyRequest().authenticated()
                 )
                 .exceptionHandling(ex -> ex

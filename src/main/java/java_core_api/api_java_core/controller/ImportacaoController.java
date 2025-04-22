@@ -18,9 +18,10 @@ public class ImportacaoController {
     private CupomImportacaoService importacaoService;
 
     @PostMapping("/nota-fiscal")
-    public ResponseEntity<Void> importarNota(@RequestBody CupomImportacaoDTO notaFiscal) {
+    public ResponseEntity<String> importarNota(@RequestBody CupomImportacaoDTO notaFiscal) {
         importacaoService.processar(notaFiscal);
-        return ResponseEntity.ok().build();
+        return ResponseEntity.ok("Nota fiscal importada com sucesso.");
+
     }
 }
 

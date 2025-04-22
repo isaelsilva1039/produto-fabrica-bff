@@ -2,7 +2,8 @@ package java_core_api.api_java_core.enums;
 
 public enum StatusNotaFiscal {
     PENDENTE(0),
-    PROCESSADO(1);
+    PROCESSADO(1),
+    CANCELADO(2);
 
     private final int codigo;
 
