@@ -24,4 +24,32 @@
         data_coleta = EXCLUDED.data_coleta
     </insert>
 
+    <select id="buscarTodos" resultMap="precoItemMercadoDTOMap">
+        SELECT
+        pim.id_produto_item,
+        pi.codigo_barras,
+        pi.descricao AS nome_produto,
+        pim.id_mercado,
+        m.razao_social AS nome_mercado,
+        pim.preco,
+        pim.data_coleta
+        FROM
+        cadastro.preco_item_mercado pim
+        LEFT JOIN
+        cadastro.produto_item pi ON pi.id = pim.id_produto_item
+        LEFT JOIN
+        cadastro.mercado m ON m.id = pim.id_mercado
+    </select>
+
+
+    <resultMap id="precoItemMercadoDTOMap" type="java_core_api.api_java_core.dtos.PrecoItemMercadoDTO">
+        <result property="idProdutoItem" column="id_produto_item"/>
+        <result property="codigoBarras" column="codigo_barras"/>
+        <result property="nomeProduto" column="nome_produto"/>
+        <result property="idMercado" column="id_mercado"/>
+        <result property="nomeMercado" column="nome_mercado"/>
+        <result property="preco" column="preco"/>
+        <result property="dataColeta" column="data_coleta"/>
+    </resultMap>
+
 </mapper>

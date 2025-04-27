@@ -40,15 +40,23 @@ public class ColetorNfController {
     @PostMapping("/coletar")
     public ResponseEntity<?> coletar(@RequestBody ColetaNotaDTO dto) {
         try {
+            System.out.println("[INFO] Iniciando coleta da nota...");
             Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
             Long userId = (Long) authentication.getPrincipal();
+            System.out.println("[INFO] Usuário autenticado com ID: " + userId);
 
-            notaFiscalService.coletarNota(dto, userId);
-            return ResponseEntity.ok("Nota coletada com sucesso!");
+            return notaFiscalService.coletarNota(dto, userId);
+
         } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Erro ao coletar nota." + e.getMessage());
+            Throwable realCause = (e.getCause() != null) ? e.getCause() : e;
+            System.err.println("[ERROR] Erro inesperado ao coletar nota: " + realCause);
+
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body("Erro inesperado ao coletar nota: " + realCause.getMessage());
         }
     }
+
+
 
 
     @GetMapping("/listar")

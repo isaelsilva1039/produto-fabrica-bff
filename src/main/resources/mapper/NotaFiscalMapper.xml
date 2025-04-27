@@ -4,8 +4,9 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="java_core_api.api_java_core.mapper.NotaFiscalMapper">
-    <insert id="inserirNotaFiscal" parameterType="java_core_api.api_java_core.domain.NotaFiscal">
-        INSERT INTO nota.nota_fiscal (
+    <insert id="inserirNotaFiscal" parameterType="java_core_api.api_java_core.domain.NotaFiscal" useGeneratedKeys="true" keyProperty="id">
+
+    INSERT INTO nota.nota_fiscal (
         usuario_id,
         chave_nf,
         url_nf,

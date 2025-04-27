@@ -30,28 +30,28 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         String authHeader = request.getHeader("Authorization");
 
         if (authHeader != null && authHeader.startsWith("Bearer ")) {
-            String token = authHeader.replace("Bearer ", "");
+            String token = authHeader.replace("Bearer ", "").trim();
 
-            try {
-                Claims claims = Jwts.parserBuilder()
-                        .setSigningKey(SECRET_KEY)
-                        .build()
-                        .parseClaimsJws(token)
-                        .getBody();
+            if (!token.isEmpty()) {
+                try {
+                    Claims claims = Jwts.parserBuilder()
+                            .setSigningKey(SECRET_KEY)
+                            .build()
+                            .parseClaimsJws(token)
+                            .getBody();
 
-                Long userId = Long.valueOf(claims.getSubject());
+                    Long userId = Long.valueOf(claims.getSubject());
 
-                UsernamePasswordAuthenticationToken authentication =
-                        new UsernamePasswordAuthenticationToken(userId, null, Collections.emptyList());
+                    UsernamePasswordAuthenticationToken authentication =
+                            new UsernamePasswordAuthenticationToken(userId, null, Collections.emptyList());
 
-                SecurityContextHolder.getContext().setAuthentication(authentication);
+                    SecurityContextHolder.getContext().setAuthentication(authentication);
 
-            } catch (Exception e) {
-                // Aqui, se o token for inválido, lança uma exceção explícita
-                response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
-                response.setContentType("application/json");
-                response.getWriter().write("{\"error\": \"Token inválido ou expirado.\"}");
-                return;
+                } catch (Exception e) {
+                    // Se o token estiver inválido, apenas ignora.
+                    // NÃO devolve erro aqui. Deixa o SecurityConfig decidir.
+                    // Apenas loga o erro se quiser.
+                }
             }
         }
 
