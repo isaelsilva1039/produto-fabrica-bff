@@ -27,14 +27,13 @@ public class ItemMercadosController {
     @GetMapping("/lista")
     public ResponseEntity<?> listarItemPorMercado() {
         try {
-
             List<PrecoItemMercadoDTO> itens = precoItemMercadoService.buscarTodos();
             return ResponseEntity.ok(itens);
 
         } catch (Exception e) {
 
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body("Erro ao buscar itens: " + e);
+                    .body("Erro ao buscar itens : " + e);
         }
 
     }
