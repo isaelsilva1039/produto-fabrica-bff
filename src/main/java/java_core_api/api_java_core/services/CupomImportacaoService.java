@@ -31,7 +31,7 @@ public class CupomImportacaoService {
         NotaFiscal notaFiscal = notaFiscalMapper.buscarNotasPorChave(emitente.getChaveAcesso());
 
         if (notaFiscal == null) {
-            throw new IllegalStateException("Nota fiscal não encontrada para chave: " + emitente.getChaveAcesso());
+            throw new IllegalStateException("Nota fiscal não encontrada para chave : " + emitente.getChaveAcesso());
         }
 
         Mercado mercado = mercadoMapper.findByCnpj(emitente.getCnpj());
