@@ -94,10 +94,16 @@ public class CupomImportacaoService {
 
             cupom.setValorCompras(cupom.getValorCompras().add(cupomItem.getPreco()));
 
+            // 🛠️ Novo ajuste AQUI:
+            BigDecimal precoUnitario = cupomItem.getPreco();
+            if (cupomItem.getQtde() != null && cupomItem.getQtde().compareTo(BigDecimal.ZERO) > 0) {
+                precoUnitario = precoUnitario.divide(cupomItem.getQtde(), 2, BigDecimal.ROUND_HALF_UP);
+            }
+
             PrecoItemMercado precoAtual = new PrecoItemMercado();
             precoAtual.setProdutoItem(item);
             precoAtual.setMercado(mercado);
-            precoAtual.setPreco(cupomItem.getPreco());
+            precoAtual.setPreco(precoUnitario);
             precoAtual.setDataColeta(cupom.getDataColeta());
             precoItemMercadoMapper.upsertPreco(precoAtual);
 
