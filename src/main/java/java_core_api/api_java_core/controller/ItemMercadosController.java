@@ -25,17 +25,18 @@ public class ItemMercadosController {
     private PrecoItemMercadoService precoItemMercadoService;
 
     @GetMapping("/lista")
-    public ResponseEntity<?> listarItemPorMercado() {
+    public ResponseEntity<?> listarItemPorMercado(
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size
+    ) {
         try {
-            List<PrecoItemMercadoDTO> itens = precoItemMercadoService.buscarTodos();
+            List<PrecoItemMercadoDTO> itens = precoItemMercadoService.buscarPaginado(page, size);
             return ResponseEntity.ok(itens);
 
         } catch (Exception e) {
-
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body("Erro ao buscar itens : " + e);
+                    .body("Erro ao buscar itens: " + e.getMessage());
         }
-
     }
 
 

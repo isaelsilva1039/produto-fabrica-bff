@@ -23,4 +23,11 @@ public class PrecoItemMercadoService {
         return precoItemMercadoMapper.buscarTodos();
     }
 
+
+    public List<PrecoItemMercadoDTO> buscarPaginado(int page, int size) {
+        int offset = page * size;
+        return precoItemMercadoMapper.buscarPaginado(offset, size);
+    }
+
+
 }
