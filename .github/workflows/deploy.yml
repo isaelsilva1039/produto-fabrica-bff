@@ -7,6 +7,7 @@ on:
 jobs:
   deploy:
     runs-on: ubuntu-latest
+    continue-on-error: true   # <- ADICIONA ISSO!
 
     steps:
       - name: Checkout código
@@ -32,7 +33,7 @@ jobs:
         run: echo "DATA_FIM=$(date '+%d/%m/%Y %H:%M:%S')" >> $GITHUB_ENV
 
       - name: Notificar Telegram - sucesso
-        if: success()
+        if: ${{ success() }}
         run: |
           curl -s -X POST https://api.telegram.org/bot${{ secrets.TELEGRAM_BOT_TOKEN }}/sendMessage \
             -d chat_id=${{ secrets.TELEGRAM_CHAT_ID }} \
@@ -40,7 +41,7 @@ jobs:
             -d text="✅ *Deploy realizado com sucesso!* 🚀%0A%0A🕓 *Iniciado:* ${{ env.DATA_INICIO }}%0A🕓 *Finalizado:* ${{ env.DATA_FIM }}%0A👤 *Usuário:* ${{ github.actor }}%0A📊 *Status:* Sucesso ✅"
 
       - name: Notificar Telegram - erro
-        if: failure()
+        if: ${{ failure() }}
         run: |
           curl -s -X POST https://api.telegram.org/bot${{ secrets.TELEGRAM_BOT_TOKEN }}/sendMessage \
             -d chat_id=${{ secrets.TELEGRAM_CHAT_ID }} \
