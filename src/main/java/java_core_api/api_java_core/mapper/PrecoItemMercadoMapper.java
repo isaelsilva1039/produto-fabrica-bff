@@ -15,4 +15,6 @@ public interface PrecoItemMercadoMapper {
 
     List<PrecoItemMercadoDTO> buscarPaginado(@Param("offset") int offset, @Param("size") int size);
 
+    List<PrecoItemMercadoDTO> buscarPorProdutoOrdenadoPorPreco(@Param("idProdutoItem") Long idProdutoItem);
+
 }

@@ -61,6 +61,27 @@
         LIMIT #{size} OFFSET #{offset}
     </select>
 
+    <select id="buscarPorProdutoOrdenadoPorPreco" resultMap="precoItemMercadoDTOMap">
+        SELECT
+        pim.id_produto_item,
+        pi.codigo_barras,
+        pi.descricao AS nome_produto,
+        pim.id_mercado,
+        m.razao_social AS nome_mercado,
+        pim.preco,
+        pim.data_coleta
+        FROM
+        cadastro.preco_item_mercado pim
+        LEFT JOIN
+        cadastro.produto_item pi ON pi.id = pim.id_produto_item
+        LEFT JOIN
+        cadastro.mercado m ON m.id = pim.id_mercado
+        WHERE
+        pim.id_produto_item = #{idProdutoItem}
+        ORDER BY
+        pim.preco ASC
+    </select>
+
 
     <resultMap id="precoItemMercadoDTOMap" type="java_core_api.api_java_core.dtos.PrecoItemMercadoDTO">
         <result property="idProdutoItem" column="id_produto_item"/>

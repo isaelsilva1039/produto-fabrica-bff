@@ -40,6 +40,18 @@ public class ItemMercadosController {
     }
 
 
+    @GetMapping("/por-produto/{idProdutoItem}")
+    public ResponseEntity<?> listarPorProdutoOrdenadoPorPreco(@PathVariable Long idProdutoItem) {
+        try {
+            List<PrecoItemMercadoDTO> precos = precoItemMercadoService.buscarPorProdutoOrdenadoPorPreco(idProdutoItem);
+            return ResponseEntity.ok(precos);
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body("Erro ao buscar preços do produto: " + e.getMessage());
+        }
+    }
+
+
 
 
 

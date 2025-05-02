@@ -38,7 +38,7 @@ jobs:
           curl -s -X POST "https://api.telegram.org/bot${{ secrets.TELEGRAM_BOT_TOKEN }}/sendMessage" \
             -d "chat_id=${{ secrets.TELEGRAM_CHAT_ID }}" \
             -d "parse_mode=Markdown" \
-            -d "text=✅ *Deploy realizado com sucesso!* 🚀%0A%0A📦 *Serviço:* ${{ github.repository }}%0A🕓 *Iniciado:* ${{ env.DATA_INICIO }}%0A🕓 *Finalizado:* ${{ env.DATA_FIM }}%0A👤 *Usuário:* ${{ github.actor }}%0A📊 *Status:* Sucesso ✅"
+                -d "text=✅ *Deploy realizado com sucesso!* 🚀%0A%0A📦 *Serviço:* ${{ github.repository }}%0A🕓 *Iniciado:* ${{ env.DATA_INICIO }}%0A🕓 *Finalizado:* ${{ env.DATA_FIM }}%0A👤 *Usuário:* ${{ github.actor }}%0A📊 *Status:* \"
 
       - name: Notificar Telegram - erro
         if: ${{ failure() }}

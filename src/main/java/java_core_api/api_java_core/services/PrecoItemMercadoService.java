@@ -30,4 +30,10 @@ public class PrecoItemMercadoService {
     }
 
 
+    public List<PrecoItemMercadoDTO> buscarPorProdutoOrdenadoPorPreco(Long idProdutoItem) {
+        return precoItemMercadoMapper.buscarPorProdutoOrdenadoPorPreco(idProdutoItem);
+    }
+
+
+
 }
