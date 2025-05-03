@@ -10,7 +10,8 @@
     </select>
 
     <insert id="insert" useGeneratedKeys="true" keyProperty="id">
-        INSERT INTO cadastro.mercado (razao_social, endereco, cnpj)
-        VALUES (#{razaoSocial}, #{endereco}, #{cnpj})
+        INSERT INTO cadastro.mercado (razao_social, endereco, cnpj, latitude, longitude)
+        VALUES (#{razaoSocial}, #{endereco}, #{cnpj}, #{latitude}, #{longitude})
     </insert>
+
 </mapper>

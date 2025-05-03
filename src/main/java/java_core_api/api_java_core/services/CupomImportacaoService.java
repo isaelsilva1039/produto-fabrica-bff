@@ -1,10 +1,12 @@
 package java_core_api.api_java_core.services;
 
 import java_core_api.api_java_core.domain.*;
+import java_core_api.api_java_core.dtos.CoordenadasDTO;
 import java_core_api.api_java_core.dtos.CupomImportacaoDTO;
 import java_core_api.api_java_core.dtos.EmitenteDTO;
 import java_core_api.api_java_core.dtos.ProdutoImportadoDTO;
 import java_core_api.api_java_core.mapper.*;
+import java_core_api.api_java_core.utils.GeolocalizacaoUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -24,6 +26,7 @@ public class CupomImportacaoService {
     @Autowired private NotaFiscalMapper notaFiscalMapper;
     @Autowired private PrecoItemMercadoMapper precoItemMercadoMapper;
     @Autowired private ProdutoItemInfoFiscalMapper produtoItemInfoFiscalMapper;
+    @Autowired private GeolocalizacaoUtils geolocalizacaoUtils;
 
     public void processar(CupomImportacaoDTO dto) {
         EmitenteDTO emitente = dto.getEmitente();
@@ -41,6 +44,19 @@ public class CupomImportacaoService {
             mercado.setFantasia(emitente.getNomeFantasia());
             mercado.setEndereco(emitente.getEndereco());
             mercado.setCnpj(emitente.getCnpj());
+
+
+            CoordenadasDTO coordenadas = geolocalizacaoUtils.obterCoordenadasPorCNPJ(emitente.getCnpj());
+
+            // Exibindo as coordenadas
+            System.out.println("Latitude: " + coordenadas.getLatitude() + ", Longitude: " + coordenadas.getLongitude());
+
+
+            if (coordenadas != null) {
+                mercado.setLongitude(coordenadas.getLongitude());
+                mercado.setLatitude(coordenadas.getLatitude());
+            }
+
             mercadoMapper.insert(mercado);
         }
 
