@@ -30,4 +30,8 @@ public interface PrecoItemMercadoMapper {
             @Param("raioKm") Double raioKm
     );
 
+    List<PrecoItemMercadoDTO> buscarPorProdutosPorCidade(
+            @Param("cidade") String cidade
+    );
+
 }

@@ -35,5 +35,8 @@ public class PrecoItemMercadoService {
     }
 
 
+    public List<PrecoItemMercadoDTO> buscarPorProdutosPorCidade(String cidade) {
+        return precoItemMercadoMapper.buscarPorProdutosPorCidade(cidade);
+    }
 
 }

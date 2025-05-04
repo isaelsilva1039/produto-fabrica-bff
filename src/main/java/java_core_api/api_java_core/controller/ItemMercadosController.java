@@ -43,6 +43,21 @@ public class ItemMercadosController {
 
 
 
+    @GetMapping("/lista/cidade")
+    public ResponseEntity<?> listarPorProdutoPorCidade(
+            @RequestParam(required = true) String cidade
+    ) {
+        try {
+
+            List<PrecoItemMercadoDTO> precos = precoItemMercadoService.buscarPorProdutosPorCidade(cidade);
+            return ResponseEntity.ok(precos);
+
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body("Erro ao buscar preços do produto por cidade: " + e.getMessage());
+        }
+    }
+
     @GetMapping("/por-produto/{idProdutoItem}")
     public ResponseEntity<?> listarPorProdutoOrdenadoPorPreco(
             @PathVariable Long idProdutoItem,

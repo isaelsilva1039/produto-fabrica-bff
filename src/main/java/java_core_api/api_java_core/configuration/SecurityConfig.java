@@ -40,6 +40,7 @@ public class SecurityConfig {
                                 "/nf/listar/pendente",
                                 "/api/importacao/nota-fiscal",
                                 "/api/itens/lista",
+                                "/api/itens/lista/cidade",
                                 "/api/itens/por-produto/{idProdutoItem}").permitAll()
                         .anyRequest().authenticated()
                 )
