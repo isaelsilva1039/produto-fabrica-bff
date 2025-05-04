@@ -33,12 +33,17 @@
         m.razao_social AS nome_mercado,
         pim.preco,
         pim.data_coleta
+        e.logradouro || ' ' || e.numero || COALESCE(' ' || e.complemento, '') AS endereco,
+        e.cidade_nome AS cidade,
+        e.estado_nome AS estado
         FROM
         cadastro.preco_item_mercado pim
         LEFT JOIN
         cadastro.produto_item pi ON pi.id = pim.id_produto_item
         LEFT JOIN
         cadastro.mercado m ON m.id = pim.id_mercado
+        LEFT JOIN
+        cadastro.endereco e ON e.id = m.id_endereco
     </select>
 
 
@@ -87,13 +92,18 @@
         pim.id_mercado,
         m.razao_social AS nome_mercado,
         pim.preco,
-        pim.data_coleta
+        pim.data_coleta,
+        e.logradouro || ' ' || e.numero || COALESCE(' ' || e.complemento, '') AS endereco,
+        e.cidade_nome AS cidade,
+        e.estado_nome AS estado
         FROM
         cadastro.preco_item_mercado pim
         LEFT JOIN
         cadastro.produto_item pi ON pi.id = pim.id_produto_item
         LEFT JOIN
         cadastro.mercado m ON m.id = pim.id_mercado
+        LEFT JOIN
+        cadastro.endereco e ON e.id = m.id_endereco
         WHERE
         pim.id_produto_item = #{idProdutoItem}
         <if test="latitude != null and longitude != null and raioKm != null">
@@ -121,7 +131,10 @@
         pim.id_mercado,
         m.razao_social AS nome_mercado,
         pim.preco,
-        pim.data_coleta
+        pim.data_coleta,
+        e.logradouro || ' ' || e.numero || COALESCE(' ' || e.complemento, '') AS endereco,
+        e.cidade_nome AS cidade,
+        e.estado_nome AS estado
         FROM
         cadastro.preco_item_mercado pim
         LEFT JOIN
@@ -130,6 +143,7 @@
         cadastro.mercado m ON m.id = pim.id_mercado
         LEFT JOIN
         cadastro.endereco e ON e.id = m.id_endereco
+
         WHERE
         pim.id_produto_item = #{idProdutoItem}
         AND e.cidade_nome like #{cidade}
@@ -146,7 +160,10 @@
         pim.id_mercado,
         m.razao_social AS nome_mercado,
         pim.preco,
-        pim.data_coleta
+        pim.data_coleta,
+        e.logradouro || ' ' || e.numero || COALESCE(' ' || e.complemento, '') AS endereco,
+        e.cidade_nome AS cidade,
+        e.estado_nome AS estado
         FROM
         cadastro.preco_item_mercado pim
         LEFT JOIN
