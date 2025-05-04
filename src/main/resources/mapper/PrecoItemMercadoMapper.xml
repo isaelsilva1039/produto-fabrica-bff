@@ -65,7 +65,7 @@
         <if test="latitude != null and longitude != null and raioKm != null">
             WHERE
             (
-            6371 * acos(
+            6378 * acos(
             cos(radians(#{latitude}))
             * cos(radians(m.latitude))
             * cos(radians(m.longitude) - radians(#{longitude}))
@@ -99,7 +99,7 @@
         <if test="latitude != null and longitude != null and raioKm != null">
             AND
             (
-            6371 * acos(
+            6378 * acos(
             cos(radians(#{latitude}))
             * cos(radians(m.latitude))
             * cos(radians(m.longitude) - radians(#{longitude}))
@@ -132,7 +132,7 @@
         cadastro.endereco e ON e.id = m.id_endereco
         WHERE
         pim.id_produto_item = #{idProdutoItem}
-        AND e.cidade_nome = #{cidade}
+        AND e.cidade_nome like #{cidade}
         ORDER BY
         pim.preco ASC
     </select>

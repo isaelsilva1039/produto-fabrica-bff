@@ -34,4 +34,14 @@ public interface PrecoItemMercadoMapper {
             @Param("cidade") String cidade
     );
 
+
+    List<PrecoItemMercadoDTO> buscarPorProdutoPorCidade(
+            @Param("idProdutoItem") Long idProdutoItem,
+            @Param("cidade") String cidade
+    );
+
+
+
+
+
 }

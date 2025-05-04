@@ -41,7 +41,7 @@ public class SecurityConfig {
                                 "/api/importacao/nota-fiscal",
                                 "/api/itens/lista",
                                 "/api/itens/lista/cidade",
-                                "/api/itens/por-produto/{idProdutoItem}").permitAll()
+                                "/api/itens/por-produto/{idProdutoItem}", "/api/itens/por-produto/{idProdutoItem}/cidade").permitAll()
                         .anyRequest().authenticated()
                 )
                 .exceptionHandling(ex -> ex
