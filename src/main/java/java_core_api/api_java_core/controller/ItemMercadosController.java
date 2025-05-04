@@ -27,12 +27,14 @@ public class ItemMercadosController {
     @GetMapping("/lista")
     public ResponseEntity<?> listarItemPorMercado(
             @RequestParam(defaultValue = "0") int page,
-            @RequestParam(defaultValue = "10") int size
+            @RequestParam(defaultValue = "10") int size,
+            @RequestParam(required = false) Double latitude,
+            @RequestParam(required = false) Double longitude,
+            @RequestParam(required = false) Double raioKm
     ) {
         try {
-            List<PrecoItemMercadoDTO> itens = precoItemMercadoService.buscarPaginado(page, size);
+            List<PrecoItemMercadoDTO> itens = precoItemMercadoService.buscarPaginado(page, size, latitude, longitude, raioKm);
             return ResponseEntity.ok(itens);
-
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
                     .body("Erro ao buscar itens: " + e.getMessage());
@@ -40,17 +42,22 @@ public class ItemMercadosController {
     }
 
 
+
     @GetMapping("/por-produto/{idProdutoItem}")
-    public ResponseEntity<?> listarPorProdutoOrdenadoPorPreco(@PathVariable Long idProdutoItem) {
+    public ResponseEntity<?> listarPorProdutoOrdenadoPorPreco(
+            @PathVariable Long idProdutoItem,
+            @RequestParam(required = false) Double latitude,
+            @RequestParam(required = false) Double longitude,
+            @RequestParam(required = false) Double raioKm
+    ) {
         try {
-            List<PrecoItemMercadoDTO> precos = precoItemMercadoService.buscarPorProdutoOrdenadoPorPreco(idProdutoItem);
+            List<PrecoItemMercadoDTO> precos = precoItemMercadoService.buscarPorProdutoOrdenadoPorPreco(idProdutoItem, latitude, longitude, raioKm);
             return ResponseEntity.ok(precos);
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
                     .body("Erro ao buscar preços do produto: " + e.getMessage());
         }
     }
-
 
 
 

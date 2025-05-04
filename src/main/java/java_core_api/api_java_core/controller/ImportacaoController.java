@@ -32,7 +32,7 @@ public class ImportacaoController {
             logger.info("[INFO] Nota fiscal importada com sucesso.");
             return ResponseEntity.ok("Nota fiscal importada com sucesso.");
         } catch (Exception e) {
-            logger.error("[ERROR] Erro ao importar nota fiscal", e); // loga o erro COMPLETO (stacktrace)
+            logger.error("[ERROR] Erro ao importar nota fiscal", e);
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
                     .body("Erro ao importar nota fiscal: " + (e.getMessage() != null ? e.getMessage() : e.toString()));
         }

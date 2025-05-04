@@ -13,8 +13,21 @@ public interface PrecoItemMercadoMapper {
 
     List<PrecoItemMercadoDTO>  buscarTodos();
 
-    List<PrecoItemMercadoDTO> buscarPaginado(@Param("offset") int offset, @Param("size") int size);
 
-    List<PrecoItemMercadoDTO> buscarPorProdutoOrdenadoPorPreco(@Param("idProdutoItem") Long idProdutoItem);
+    List<PrecoItemMercadoDTO> buscarPaginado(
+            @Param("offset") int offset,
+            @Param("size") int size,
+            @Param("latitude") Double latitude,
+            @Param("longitude") Double longitude,
+            @Param("raioKm") Double raioKm
+    );
+
+
+    List<PrecoItemMercadoDTO> buscarPorProdutoOrdenadoPorPreco(
+            @Param("idProdutoItem") Long idProdutoItem,
+            @Param("latitude") Double latitude,
+            @Param("longitude") Double longitude,
+            @Param("raioKm") Double raioKm
+    );
 
 }

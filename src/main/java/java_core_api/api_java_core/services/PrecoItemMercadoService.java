@@ -24,14 +24,14 @@ public class PrecoItemMercadoService {
     }
 
 
-    public List<PrecoItemMercadoDTO> buscarPaginado(int page, int size) {
+    public List<PrecoItemMercadoDTO> buscarPaginado(int page, int size, Double latitude, Double longitude, Double raioKm) {
         int offset = page * size;
-        return precoItemMercadoMapper.buscarPaginado(offset, size);
+        return precoItemMercadoMapper.buscarPaginado(offset, size, latitude, longitude, raioKm);
     }
 
 
-    public List<PrecoItemMercadoDTO> buscarPorProdutoOrdenadoPorPreco(Long idProdutoItem) {
-        return precoItemMercadoMapper.buscarPorProdutoOrdenadoPorPreco(idProdutoItem);
+    public List<PrecoItemMercadoDTO> buscarPorProdutoOrdenadoPorPreco(Long idProdutoItem, Double latitude, Double longitude, Double raioKm) {
+        return precoItemMercadoMapper.buscarPorProdutoOrdenadoPorPreco(idProdutoItem, latitude, longitude, raioKm);
     }
 
 

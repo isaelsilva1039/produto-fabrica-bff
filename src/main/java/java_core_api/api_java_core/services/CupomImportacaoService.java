@@ -48,10 +48,6 @@ public class CupomImportacaoService {
 
             CoordenadasDTO coordenadas = geolocalizacaoUtils.obterCoordenadasPorCNPJ(emitente.getCnpj());
 
-            // Exibindo as coordenadas
-            System.out.println("Latitude: " + coordenadas.getLatitude() + ", Longitude: " + coordenadas.getLongitude());
-
-
             if (coordenadas != null) {
                 mercado.setLongitude(coordenadas.getLongitude());
                 mercado.setLatitude(coordenadas.getLatitude());
