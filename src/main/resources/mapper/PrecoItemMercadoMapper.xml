@@ -156,7 +156,7 @@
         LEFT JOIN
         cadastro.endereco e ON e.id = m.id_endereco
         WHERE
-         e.cidade_nome = #{cidade}
+         e.cidade_nome like #{cidade}
         ORDER BY
         pim.preco ASC
     </select>
