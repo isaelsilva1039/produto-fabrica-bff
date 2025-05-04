@@ -1,8 +1,6 @@
 package java_core_api.api_java_core.dtos;
 
-
 import lombok.Data;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @Data
@@ -14,4 +12,9 @@ public class PrecoItemMercadoDTO {
     private String nomeMercado;
     private Double preco;
     private LocalDateTime dataColeta;
+
+    // Novos campos adicionados
+    private String endereco;
+    private String cidade;
+    private String estado;
 }

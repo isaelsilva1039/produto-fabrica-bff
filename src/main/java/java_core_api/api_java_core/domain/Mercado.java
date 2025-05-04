@@ -14,11 +14,11 @@ public class Mercado {
     private Grupo grupo;
     private Bandeira bandeira;
     private Integer idCidade;
-    private String endereco;
     private String bairro;
     private BigDecimal longitude;
     private BigDecimal latitude;
     private String ddd;
     private String telefone;
     private String cnpj;
+    private Endereco endereco;
 }

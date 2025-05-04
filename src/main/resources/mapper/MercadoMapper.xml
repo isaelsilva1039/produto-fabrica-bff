@@ -3,15 +3,29 @@
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
-
 <mapper namespace="java_core_api.api_java_core.mapper.MercadoMapper">
-    <select id="findByCnpj" resultType="java_core_api.api_java_core.domain.Mercado">
-        SELECT * FROM cadastro.mercado WHERE cnpj = #{cnpj}
+
+    <resultMap id="mercadoMap" type="java_core_api.api_java_core.domain.Mercado">
+        <id property="id" column="id"/>
+        <result property="razaoSocial" column="razao_social"/>
+        <result property="cnpj" column="cnpj"/>
+        <result property="latitude" column="latitude"/>
+        <result property="longitude" column="longitude"/>
+        <association property="endereco" javaType="java_core_api.api_java_core.domain.Endereco">
+            <id property="id" column="endereco_id"/>
+        </association>
+    </resultMap>
+
+    <select id="findByCnpj" resultMap="mercadoMap">
+        SELECT m.*, e.id as endereco_id
+        FROM cadastro.mercado m
+        LEFT JOIN cadastro.endereco e ON e.id = m.id_endereco
+        WHERE m.cnpj = #{cnpj}
     </select>
 
     <insert id="insert" useGeneratedKeys="true" keyProperty="id">
-        INSERT INTO cadastro.mercado (razao_social, endereco, cnpj, latitude, longitude)
-        VALUES (#{razaoSocial}, #{endereco}, #{cnpj}, #{latitude}, #{longitude})
+        INSERT INTO cadastro.mercado (razao_social, cnpj, latitude, longitude, id_endereco)
+        VALUES (#{razaoSocial}, #{cnpj}, #{latitude}, #{longitude}, #{endereco.id})
     </insert>
 
 </mapper>

@@ -171,3 +171,32 @@ ALTER TABLE cadastro.produto_item_info_fiscal
     ALTER COLUMN cst_pis TYPE VARCHAR(255),
     ALTER COLUMN cst_cofins TYPE VARCHAR(255);
 
+
+
+
+
+CREATE TABLE cadastro.endereco (
+    id SERIAL PRIMARY KEY,
+    tipo_logradouro VARCHAR(50),
+    logradouro VARCHAR(255),
+    numero VARCHAR(20),
+    complemento VARCHAR(100),
+    bairro VARCHAR(100),
+    cep VARCHAR(10),
+    telefone1 VARCHAR(15),
+    telefone2 VARCHAR(15),
+    email VARCHAR(255),
+    cidade_nome VARCHAR(100),
+    estado_nome VARCHAR(100),
+    pais_id INT,
+    ativo BOOLEAN DEFAULT TRUE
+);
+
+
+
+ALTER TABLE cadastro.mercado
+ADD COLUMN id_endereco BIGINT,
+ADD CONSTRAINT fk_mercado_endereco
+    FOREIGN KEY (id_endereco)
+    REFERENCES cadastro.endereco(id);
+

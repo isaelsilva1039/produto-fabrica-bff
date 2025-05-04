@@ -1,11 +1,9 @@
 package java_core_api.api_java_core.services;
 
 import java_core_api.api_java_core.domain.*;
-import java_core_api.api_java_core.dtos.CoordenadasDTO;
-import java_core_api.api_java_core.dtos.CupomImportacaoDTO;
-import java_core_api.api_java_core.dtos.EmitenteDTO;
-import java_core_api.api_java_core.dtos.ProdutoImportadoDTO;
+import java_core_api.api_java_core.dtos.*;
 import java_core_api.api_java_core.mapper.*;
+import java_core_api.api_java_core.utils.EnderecoUtil;
 import java_core_api.api_java_core.utils.GeolocalizacaoUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -13,20 +11,41 @@ import org.springframework.stereotype.Service;
 import java.math.BigDecimal;
 import java.text.NumberFormat;
 import java.time.LocalDateTime;
+import java.util.Date;
 import java.util.Locale;
 
 @Service
 public class CupomImportacaoService {
 
-    @Autowired private MercadoMapper mercadoMapper;
-    @Autowired private ProdutoMapper produtoMapper;
-    @Autowired private ProdutoItemMapper produtoItemMapper;
-    @Autowired private CupomMapper cupomMapper;
-    @Autowired private CupomItemMapper cupomItemMapper;
-    @Autowired private NotaFiscalMapper notaFiscalMapper;
-    @Autowired private PrecoItemMercadoMapper precoItemMercadoMapper;
-    @Autowired private ProdutoItemInfoFiscalMapper produtoItemInfoFiscalMapper;
-    @Autowired private GeolocalizacaoUtils geolocalizacaoUtils;
+    @Autowired
+    private MercadoMapper mercadoMapper;
+
+    @Autowired
+    private ProdutoMapper produtoMapper;
+
+    @Autowired
+    private ProdutoItemMapper produtoItemMapper;
+
+    @Autowired
+    private CupomMapper cupomMapper;
+
+    @Autowired
+    private CupomItemMapper cupomItemMapper;
+
+    @Autowired
+    private NotaFiscalMapper notaFiscalMapper;
+
+    @Autowired
+    private PrecoItemMercadoMapper precoItemMercadoMapper;
+
+    @Autowired
+    private ProdutoItemInfoFiscalMapper produtoItemInfoFiscalMapper;
+
+    @Autowired
+    private GeolocalizacaoUtils geolocalizacaoUtils;
+
+    @Autowired
+    private EnderecoMapper enderecoMapper;
 
     public void processar(CupomImportacaoDTO dto) {
         EmitenteDTO emitente = dto.getEmitente();
@@ -37,17 +56,42 @@ public class CupomImportacaoService {
             throw new IllegalStateException("Nota fiscal não encontrada para chave : " + emitente.getChaveAcesso());
         }
 
+        EnderecoDTO enderecoDTO = EnderecoUtil.buscarEnderecoPorCnpj(emitente.getCnpj());
+
+        Endereco endereco = null;
+
+        if (enderecoDTO != null) {
+            endereco = new Endereco();
+            endereco.setCep(enderecoDTO.getCep());
+            endereco.setTipoLogradouro(enderecoDTO.getTipoLogradouro());
+            endereco.setLogradouro(enderecoDTO.getLogradouro());
+            endereco.setNumero(enderecoDTO.getNumero());
+            endereco.setComplemento(enderecoDTO.getComplemento());
+            endereco.setBairro(enderecoDTO.getBairro());
+            endereco.setCidade(enderecoDTO.getCidade());
+            endereco.setEstado(enderecoDTO.getEstado());
+
+            enderecoMapper.inserirEndereco(endereco);
+        }
+
         Mercado mercado = mercadoMapper.findByCnpj(emitente.getCnpj());
         if (mercado == null) {
             mercado = new Mercado();
-            mercado.setRazaoSocial(emitente.getRazaoSocial());
-            mercado.setFantasia(emitente.getNomeFantasia());
-            mercado.setEndereco(emitente.getEndereco());
+
+            String razao = (enderecoDTO != null && enderecoDTO.getRazaoSocial() != null && !enderecoDTO.getRazaoSocial().isEmpty())
+                    ? enderecoDTO.getRazaoSocial()
+                    : emitente.getRazaoSocial();
+
+            String fantasia = (enderecoDTO != null && enderecoDTO.getNomeFantasia() != null && !enderecoDTO.getNomeFantasia().isEmpty())
+                    ? enderecoDTO.getNomeFantasia()
+                    : emitente.getNomeFantasia();
+
+            mercado.setRazaoSocial(razao);
+            mercado.setFantasia(fantasia);
+            mercado.setEndereco(endereco);
             mercado.setCnpj(emitente.getCnpj());
 
-
             CoordenadasDTO coordenadas = geolocalizacaoUtils.obterCoordenadasPorCNPJ(emitente.getCnpj());
-
             if (coordenadas != null) {
                 mercado.setLongitude(coordenadas.getLongitude());
                 mercado.setLatitude(coordenadas.getLatitude());
