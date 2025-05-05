@@ -103,9 +103,9 @@
         e.estado_nome AS estado
         FROM
         cadastro.preco_item_mercado pim
-        LEFT JOIN cadastro.produto_item pi ON pi.id = pim.id_produto_item
-        LEFT JOIN cadastro.mercado m ON m.id = pim.id_mercado
-        LEFT JOIN cadastro.endereco e ON e.id = m.id_endereco
+        INNER JOIN cadastro.produto_item pi ON pi.id = pim.id_produto_item
+        INNER JOIN cadastro.mercado m ON m.id = pim.id_mercado
+        INNER JOIN cadastro.endereco e ON e.id = m.id_endereco
         WHERE
         pim.id_produto_item = #{idProdutoItem}
         <if test="latitude != null and longitude != null and raioKm != null">
