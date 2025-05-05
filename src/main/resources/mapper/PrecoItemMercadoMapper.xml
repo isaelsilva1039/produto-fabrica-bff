@@ -68,18 +68,21 @@
         LEFT JOIN
         cadastro.endereco e ON e.id = m.id_endereco
 
-        <if test="latitude != null and longitude != null and raioKm != null">
-            AND m.latitude IS NOT NULL AND m.longitude IS NOT NULL
-            AND (
-            6378 * acos(
-            cos(radians(#{latitude}))
-            * cos(radians(m.latitude))
-            * cos(radians(m.longitude) - radians(#{longitude}))
-            + sin(radians(#{latitude}))
-            * sin(radians(m.latitude))
-            )
-            ) &lt;= #{raioKm}
-        </if>
+        <where>
+            m.latitude IS NOT NULL AND m.longitude IS NOT NULL
+            <if test="latitude != null and longitude != null and raioKm != null">
+                AND (
+                6378 * acos(
+                cos(radians(#{latitude}))
+                * cos(radians(m.latitude))
+                * cos(radians(m.longitude) - radians(#{longitude}))
+                + sin(radians(#{latitude}))
+                * sin(radians(m.latitude))
+                )
+                ) &lt;= #{raioKm}
+            </if>
+        </where>
+
 
         ORDER BY pim.data_coleta DESC
         LIMIT #{size} OFFSET #{offset}
@@ -108,19 +111,20 @@
         cadastro.endereco e ON e.id = m.id_endereco
         WHERE
         pim.id_produto_item = #{idProdutoItem}
-        <if test="latitude != null and longitude != null and raioKm != null">
-            AND m.latitude IS NOT NULL AND m.longitude IS NOT NULL
-            AND
-            (
-            6378 * acos(
-            cos(radians(#{latitude}))
-            * cos(radians(m.latitude))
-            * cos(radians(m.longitude) - radians(#{longitude}))
-            + sin(radians(#{latitude}))
-            * sin(radians(m.latitude))
-            )
-            ) &lt;= #{raioKm}
-        </if>
+        <where>
+            m.latitude IS NOT NULL AND m.longitude IS NOT NULL
+            <if test="latitude != null and longitude != null and raioKm != null">
+                AND (
+                6378 * acos(
+                cos(radians(#{latitude}))
+                * cos(radians(m.latitude))
+                * cos(radians(m.longitude) - radians(#{longitude}))
+                + sin(radians(#{latitude}))
+                * sin(radians(m.latitude))
+                )
+                ) &lt;= #{raioKm}
+            </if>
+        </where>
         ORDER BY
         pim.preco ASC
     </select>
