@@ -61,23 +61,20 @@
         e.estado_nome AS estado
         FROM
         cadastro.preco_item_mercado pim
-        LEFT JOIN
-        cadastro.produto_item pi ON pi.id = pim.id_produto_item
-        LEFT JOIN
-        cadastro.mercado m ON m.id = pim.id_mercado
-        LEFT JOIN
-        cadastro.endereco e ON e.id = m.id_endereco
+        INNER JOIN cadastro.produto_item pi ON pi.id = pim.id_produto_item
+        INNER JOIN cadastro.mercado m ON m.id = pim.id_mercado
+        INNER JOIN cadastro.endereco e ON e.id = m.id_endereco
 
         <where>
             m.latitude IS NOT NULL AND m.longitude IS NOT NULL
             <if test="latitude != null and longitude != null and raioKm != null">
                 AND (
-                6378 * acos(
-                cos(radians(#{latitude}))
-                * cos(radians(m.latitude))
-                * cos(radians(m.longitude) - radians(#{longitude}))
-                + sin(radians(#{latitude}))
-                * sin(radians(m.latitude))
+                6371 * acos(
+                LEAST(1, GREATEST(-1,
+                cos(radians(#{latitude})) * cos(radians(m.latitude)) *
+                cos(radians(m.longitude) - radians(#{longitude})) +
+                sin(radians(#{latitude})) * sin(radians(m.latitude))
+                ))
                 )
                 ) &lt;= #{raioKm}
             </if>
