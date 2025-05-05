@@ -67,9 +67,10 @@
         cadastro.mercado m ON m.id = pim.id_mercado
         LEFT JOIN
         cadastro.endereco e ON e.id = m.id_endereco
+
         <if test="latitude != null and longitude != null and raioKm != null">
-            WHERE
-            (
+            AND m.latitude IS NOT NULL AND m.longitude IS NOT NULL
+            AND (
             6378 * acos(
             cos(radians(#{latitude}))
             * cos(radians(m.latitude))
@@ -79,6 +80,7 @@
             )
             ) &lt;= #{raioKm}
         </if>
+
         ORDER BY pim.data_coleta DESC
         LIMIT #{size} OFFSET #{offset}
     </select>
@@ -107,6 +109,7 @@
         WHERE
         pim.id_produto_item = #{idProdutoItem}
         <if test="latitude != null and longitude != null and raioKm != null">
+            AND m.latitude IS NOT NULL AND m.longitude IS NOT NULL
             AND
             (
             6378 * acos(
