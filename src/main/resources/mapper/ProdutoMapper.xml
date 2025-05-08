@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="java_core_api.api_java_core.mapper.ProdutoMapper">
+
+    <!-- Selecionar todos os produtos -->
+    <select id="listarTodas" resultMap="produtoResultMap">
+        SELECT id, nome, codigo_barras, fabricante_id FROM pulse.produto
+    </select>
+
+
+    <!-- Inserir novo produto -->
+    <insert id="salvar" parameterType="java_core_api.api_java_core.domain.Produto" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO pulse.produto (nome, codigo_barras, fabricante_id)
+        VALUES (#{nome}, #{codigoBarras}, #{fabricanteId});
+    </insert>
+
+    <!-- Atualizar dados de um produto -->
+    <update id="atualizar" parameterType="java_core_api.api_java_core.domain.Produto">
+        UPDATE pulse.produto
+        SET nome = #{nome}, codigo_barras = #{codigoBarras}, fabricante_id = #{fabricanteId}
+        WHERE id = #{id};
+    </update>
+
+    <!-- Deletar produto pelo ID -->
+    <delete id="deletar" parameterType="long">
+        DELETE FROM pulse.produto WHERE id = #{id};
+    </delete>
+
+    <!-- Buscar um produto pelo ID -->
+    <select id="buscarPorId" resultMap="produtoResultMap">
+        SELECT id, nome, codigo_barras, fabricante_id FROM pulse.produto WHERE id = #{id};
+    </select>
+
+    <!-- Definindo o resultMap -->
+    <resultMap id="produtoResultMap" type="java_core_api.api_java_core.domain.Produto">
+        <id property="id" column="id"/>
+        <result property="nome" column="nome"/>
+        <result property="codigoBarras" column="codigo_barras"/>
+        <result property="fabricanteId" column="fabricante_id"/>
+    </resultMap>
+
+</mapper>
