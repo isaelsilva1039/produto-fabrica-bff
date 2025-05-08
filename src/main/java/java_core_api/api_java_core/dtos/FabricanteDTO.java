@@ -1,16 +1,18 @@
 package java_core_api.api_java_core.dtos;
 
-import jakarta.validation.constraints.NotBlank;
-
 public class FabricanteDTO {
-
-    @NotBlank(message = "Nome é obrigatório")
+    private Integer id;
     private String nome;
-
-    @NotBlank(message = "CNPJ é obrigatório")
     private String cnpj;
 
-    // Getters and Setters
+    // Construtores
+    public FabricanteDTO(String nome, String cnpj, Integer  id) {
+        this.id = id;
+        this.nome = nome;
+        this.cnpj = cnpj;
+    }
+
+    // Getters e Setters
     public String getNome() {
         return nome;
     }
@@ -25,5 +27,14 @@ public class FabricanteDTO {
 
     public void setCnpj(String cnpj) {
         this.cnpj = cnpj;
+    }
+
+
+    public Integer getId() {
+        return id;
+    }
+
+        public void setId(Integer id) {
+        this.id = id;
     }
 }
