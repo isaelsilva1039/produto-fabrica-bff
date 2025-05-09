@@ -15,7 +15,7 @@ public class FabricanteClient {
     @Autowired
     private RestTemplate restTemplate;
 
-    private final String url = "http://localhost:8085/api/v1/fabricante";
+    private final String url = "http://host.docker.internal:8085/api/v1/fabricante";
 
     public ResponseEntity<String> salvarFabricante(FabricanteDTO fabricante) {
         HttpHeaders headers = new HttpHeaders();

@@ -14,7 +14,7 @@ public class ProdutoClient {
     @Autowired
     private RestTemplate restTemplate;
 
-    private final String url = "http://localhost:8087/api/v1/produto";
+    private final String url = "http://host.docker.internal:8087/api/v1/produto";
 
     public ResponseEntity<String> salvarProduto(ProdutoDTO produto) {
         HttpHeaders headers = new HttpHeaders();
